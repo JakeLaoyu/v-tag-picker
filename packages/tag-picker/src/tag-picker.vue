@@ -197,14 +197,9 @@ export default {
       } else {
         this.showTagNum = true
         let $topContent = this.$refs['top-content']
-        let firstItem = $topContent.querySelector('.vtag-item')
+        let firstItem = $topContent.querySelectorAll('.vtag-item')[this.multipleSelection.length - 1]
         let firstItemRect = firstItem.getBoundingClientRect()
         this.$set(this.vtagTopContentStyle, 'paddingRight', '94px')
-        console.log('束带结发')
-        console.log(firstItem.offsetLeft)
-        console.log(firstItem.getAttribute('transform-x'))
-        console.log(firstItemRect.width)
-        console.log(Number($topContent.style.paddingLeft))
         this.vtopContentWidth = `${firstItem.offsetLeft + Number(firstItem.getAttribute('transform-x')) + firstItemRect.width + Number($topContent.style.paddingLeft) + 94}px`
       }
     },
