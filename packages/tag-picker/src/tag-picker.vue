@@ -1,27 +1,130 @@
 <template>
-  <div class="vtag-wrap" :style="{
-    'z-index': zIndex
-  }">
+  <div
+    ref="vtag-wrap"
+    class="vtag-wrap"
+    :style="{
+      'z-index': zIndex
+    }"
+  >
 
+    <div class="vtag-top" ref="top">
+      <VTagPickerItem
+        class="vtag-top__item"
+        type="light"
+        title="心血管"
+        />
+    </div>
+
+    <slot name="top"></slot>
+
+    <div class="vtag-container" ref="container">
+      <div class="vtag-container__content">
+        <VTagPickerItem
+          class="vtag-container__item"
+          v-for="item in tagData"
+          :key="item.key"
+          :title="item.title"
+          />
+      </div>
+    </div>
+
+    <div ref="vtag-footer" class="vtag-footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 <script>
 export default {
   name: 'VTagPicker',
   props: {
-    zIndex: Number
+    zIndex: Number,
+    tagData: {
+      type: Array,
+      default: () => ([])
+    }
+  },
+  watch: {
+    tagData: {
+      handler (val) {
+        this.$nextTick(() => {
+          this.computedContainerHeight()
+        })
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    computedContainerHeight () {
+      const $vtagWrap = this.$refs['vtag-wrap']
+      const $container = this.$refs.container
+      const $vtagFooter = this.$refs['vtag-footer']
+      $container.style.height = `${$vtagWrap.offsetHeight - $container.offsetTop - ($vtagFooter.offsetHeight || 0)}px`
+    }
   },
   data () {
     return {}
   }
 }
 </script>
-<style scoped lang="scss">
-.tag {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+<style scoped lang="less">
+.vtag {
+  &-wrap{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  &-top {
+    box-sizing: border-box;
+    padding: 10px 15px;
+    overflow: auto;
+    background: #F2F2F2;
+    font-size: 0;
+    white-space: nowrap;
+    margin-bottom: 15px;
+    &__item {
+      display: inline-block;
+    }
+    &__item+.vtag-top__item {
+      margin-left: 15px;
+    }
+  }
+  &-container {
+    text-align: center;
+    font-size: 0;
+    position: relative;
+    box-sizing: border-box;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+      transform: rotate(180deg);
+    }
+    &__content {
+      min-width: 100px;
+      overflow: auto;
+      height: 100%;
+      padding: 30px 25px;
+      box-sizing: border-box;
+    }
+    &__item {
+      display: inline-block;
+      margin: 0 15px 15px 0;
+    }
+  }
 }
 </style>
