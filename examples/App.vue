@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     change (val) {
-      console.log(val)
+      // console.log(val)
     }
   }
 }

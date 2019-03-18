@@ -9,6 +9,10 @@
 
     <div class="vtag-top" ref="top">
       <div ref="top-content" class="vtag-top__content" :style="vtagTopContentStyle">
+        <div class="vtag-top-content__width" :style="{
+          width: vtopContentWidth,
+          height: '1px'
+        }"></div>
         <VTagPickerItem
           class="vtag-top__item"
           type="light"
@@ -37,7 +41,7 @@
           :title="item.title"
           @click="(e)=>{ handleClickVtag(e,item) }"
           :style="{
-            transition: `transform ${animationDuration / 1000}s`,
+            transition: `all ${animationDuration / 1000}s`,
             animationDuration: `${animationDuration / 1000}s`
           }"
           />
@@ -51,7 +55,7 @@
   </div>
 </template>
 <script>
-import { sleep } from '../util.js'
+import { sleep, debounce } from '../util.js'
 export default {
   name: 'VTagPicker',
   props: {
@@ -71,18 +75,15 @@ export default {
   },
   data () {
     return {
+      vtagTopContentStyle: {},
       showTagNum: false,
       selection: [],
       domQueue: [],
       animating: false,
-      totalSelection: []
-    }
-  },
-  computed: {
-    vtagTopContentStyle () {
-      return {
-        paddingRight: this.showTagNum ? '94px' : '15px'
-      }
+      totalSelection: [],
+      vtopContentWidth: '100%',
+      debounceResetContentTag: debounce(this.resetContentTag, this.animationDuration * 1.5),
+      hasSelectionDom: []
     }
   },
   watch: {
@@ -90,19 +91,14 @@ export default {
       handler (val) {
         this.selection = JSON.parse(JSON.stringify(val))
         this.totalSelection = JSON.parse(JSON.stringify(val))
-      },
-      immediate: true
-    },
-    totalSelection (val) {
-      this.$emit('change', JSON.parse(JSON.stringify(val)))
-    },
-    selection: {
-      handler (val) {
         this.$nextTick(() => {
           this.computedTagNumShow()
         })
       },
       immediate: true
+    },
+    totalSelection (val) {
+      this.$emit('change', JSON.parse(JSON.stringify(val)))
     },
     tagData: {
       handler (val) {
@@ -154,13 +150,15 @@ export default {
       this.moveExist(e)
       $targetClone.style.transform = `translate(${-$targetRect.x + 15}px,${-$targetRect.y + 10}px)`
       setTimeout(() => {
-        // $target.parentNode.removeChild($target)
+        this.hasSelectionDom.push($target)
+        this.debounceResetContentTag()
         $targetClone.parentNode.removeChild($targetClone)
         this.selection.unshift({
           ...data,
           key: this.selection.length
         })
         this.animating = false
+        this.computedTagNumShow()
         if (this.domQueue.length) {
           let dom = this.domQueue.shift()
           this.moveTag(dom.event, dom.data)
@@ -192,10 +190,22 @@ export default {
     // 判断是否显示顶部隐藏的tag数量
     computedTagNumShow () {
       const $topContent = this.$refs['top-content']
-      if ($topContent.scrollWidth === $topContent.offsetWidth) {
+      if ($topContent.scrollWidth === $topContent.clientWidth) {
         this.showTagNum = false
+        this.$set(this.vtagTopContentStyle, 'width', '100%')
+        this.$set(this.vtagTopContentStyle, 'paddingRight', '15px')
       } else {
         this.showTagNum = true
+        let $topContent = this.$refs['top-content']
+        let firstItem = $topContent.querySelector('.vtag-item')
+        let firstItemRect = firstItem.getBoundingClientRect()
+        this.$set(this.vtagTopContentStyle, 'paddingRight', '94px')
+        console.log('束带结发')
+        console.log(firstItem.offsetLeft)
+        console.log(firstItem.getAttribute('transform-x'))
+        console.log(firstItemRect.width)
+        console.log(Number($topContent.style.paddingLeft))
+        this.vtopContentWidth = `${firstItem.offsetLeft + Number(firstItem.getAttribute('transform-x')) + firstItemRect.width + Number($topContent.style.paddingLeft) + 94}px`
       }
     },
     // 计算内容区域高度
@@ -204,7 +214,22 @@ export default {
       const $container = this.$refs.container
       const $vtagFooter = this.$refs['vtag-footer']
       $container.style.height = `${$vtagWrap.offsetHeight - $container.offsetTop - ($vtagFooter.offsetHeight || 0)}px`
+    },
+    resetContentTag () {
+      this.hasSelectionDom.forEach(item => {
+        item.style.width = '0'
+        item.style.height = '0'
+        item.style.padding = '0'
+        item.style.margin = '0'
+      })
     }
+  },
+  mounted () {
+    this.bodyStyle = document.body.style
+    document.body.style = `${this.bodyStyle}overflow: hidden;`
+  },
+  beforeDestroy () {
+    document.body.style = this.bodyStyle
   }
 }
 </script>
