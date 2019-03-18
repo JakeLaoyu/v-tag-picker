@@ -217,10 +217,7 @@ export default {
     },
     resetContentTag () {
       this.hasSelectionDom.forEach(item => {
-        item.style.width = '0'
-        item.style.height = '0'
-        item.style.padding = '0'
-        item.style.margin = '0'
+        item.classList.add('hide')
       })
     }
   },
@@ -304,6 +301,7 @@ export default {
       right: 0;
       height: 30px;
       background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+      z-index: 2;
     }
     &::after {
       content: '';
@@ -314,6 +312,7 @@ export default {
       height: 30px;
       background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
       transform: rotate(180deg);
+      z-index: 2;
     }
     &__content {
       min-width: 100px;
@@ -326,6 +325,12 @@ export default {
       display: inline-block;
       margin: 0 15px 15px 0;
       position: relative;
+      &.hide {
+        margin: 0;
+        padding: 0;
+        width: 0!important;
+        height: 0!important;
+      }
       &.animate {
         animation: grow linear alternate;
       }
