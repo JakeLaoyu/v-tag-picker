@@ -8,11 +8,19 @@
   >
 
     <div class="vtag-top" ref="top">
-      <VTagPickerItem
-        class="vtag-top__item"
-        type="light"
-        title="心血管"
+      <div class="vtag-top__content">
+        <VTagPickerItem
+          class="vtag-top__item"
+          type="light"
+          v-for="item in tagData"
+          :key="item.key"
+          :title="item.title"
         />
+      </div>
+
+      <div class="vtag-top__right">
+        <div class="vtag-top__num">{{ `+${tagData.length}` }}</div>
+      </div>
     </div>
 
     <slot name="top"></slot>
@@ -77,12 +85,44 @@ export default {
   }
   &-top {
     box-sizing: border-box;
-    padding: 10px 15px;
-    overflow: auto;
     background: #F2F2F2;
     font-size: 0;
-    white-space: nowrap;
     margin-bottom: 15px;
+    position: relative;
+    &__content {
+      padding: 10px 15px;
+      overflow: auto;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+    &__right {
+      text-align: right;
+      padding-right: 15px;
+      box-sizing: border-box;
+      width: 94px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background:linear-gradient(90deg,rgba(245,245,245,0) 0%,rgba(245,245,245,1) 100%);
+      &:after {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+    &__num {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 16px;
+      color: #fff;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 6px;
+      border-radius: 16px;
+      background: #000000;
+    }
     &__item {
       display: inline-block;
     }
