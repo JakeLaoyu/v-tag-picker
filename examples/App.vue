@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <v-tag-picker :tagData="tagData">
+    <v-tag-picker
+      :tagData="tagData"
+      :multipleSelection="multipleSelection"
+    >
       <div class="img-wrap" slot="top">
         <img class="" src="~@/examples/assets/tagbg.png" alt="">
         <div class="img-wrap__title">最感兴趣的栏目</div>
@@ -20,7 +23,8 @@ export default {
   components: {},
   data () {
     return {
-      tagData: Array.from(new Array(50), (val, index) => ({ title: '心血管', key: index }))
+      tagData: Array.from(new Array(50), (val, index) => ({ title: '心血管', key: index })),
+      multipleSelection: Array.from(new Array(50), (val, index) => ({ title: '心血管', key: index }))
     }
   }
 }

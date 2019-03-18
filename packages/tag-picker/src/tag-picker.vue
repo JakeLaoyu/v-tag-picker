@@ -8,18 +8,18 @@
   >
 
     <div class="vtag-top" ref="top">
-      <div class="vtag-top__content">
+      <div ref="top-content" class="vtag-top__content" :style="vtagTopContentStyle">
         <VTagPickerItem
           class="vtag-top__item"
           type="light"
-          v-for="item in tagData"
+          v-for="item in selection"
           :key="item.key"
           :title="item.title"
         />
       </div>
 
-      <div class="vtag-top__right">
-        <div class="vtag-top__num">{{ `+${tagData.length}` }}</div>
+      <div class="vtag-top__right" v-if="showTagNum">
+        <div class="vtag-top__num">{{ `+${selection.length}` }}</div>
       </div>
     </div>
 
@@ -49,9 +49,40 @@ export default {
     tagData: {
       type: Array,
       default: () => ([])
+    },
+    multipleSelection: {
+      type: Array,
+      default: () => ([])
+    }
+  },
+  data () {
+    return {
+      showTagNum: false,
+      selection: []
+    }
+  },
+  computed: {
+    vtagTopContentStyle () {
+      return {
+        paddingRight: this.showTagNum ? '94px' : '15px'
+      }
     }
   },
   watch: {
+    multipleSelection: {
+      handler (val) {
+        this.selection = [...val]
+      },
+      immediate: true
+    },
+    selection: {
+      handler (val) {
+        this.$nextTick(() => {
+          this.computedTagNumShow()
+        })
+      },
+      immediate: true
+    },
     tagData: {
       handler (val) {
         this.$nextTick(() => {
@@ -62,15 +93,20 @@ export default {
     }
   },
   methods: {
+    computedTagNumShow () {
+      const $topContent = this.$refs['top-content']
+      if ($topContent.scrollWidth === $topContent.offsetWidth) {
+        this.showTagNum = false
+      } else {
+        this.showTagNum = true
+      }
+    },
     computedContainerHeight () {
       const $vtagWrap = this.$refs['vtag-wrap']
       const $container = this.$refs.container
       const $vtagFooter = this.$refs['vtag-footer']
       $container.style.height = `${$vtagWrap.offsetHeight - $container.offsetTop - ($vtagFooter.offsetHeight || 0)}px`
     }
-  },
-  data () {
-    return {}
   }
 }
 </script>
