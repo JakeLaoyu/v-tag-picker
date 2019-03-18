@@ -2,6 +2,7 @@
   <div
     class="vtag-item"
     :class="[ `vtag-item-${type}` ]"
+    @click="handleClickVtag"
   >
     {{ title }}
   </div>
@@ -21,6 +22,11 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+    handleClickVtag (e) {
+      this.$emit('click', e)
+    }
   }
 }
 </script>
@@ -32,6 +38,8 @@ export default {
     border-radius: 3px;
     font-size: 14px;
     white-space: nowrap;
+    box-sizing: border-box;
+    vertical-align: middle;
     &-default {
       background: #EFEFEF;
       color: #444;

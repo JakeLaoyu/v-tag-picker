@@ -12,9 +12,12 @@
         <VTagPickerItem
           class="vtag-top__item"
           type="light"
-          v-for="item in selection"
-          :key="item.key"
+          v-for="(item,index) in selection"
+          :key="index"
           :title="item.title"
+          :style="{
+            transition: `transform ${animationDuration / 1000}s`
+          }"
         />
       </div>
 
@@ -29,9 +32,14 @@
       <div class="vtag-container__content">
         <VTagPickerItem
           class="vtag-container__item"
-          v-for="item in tagData"
-          :key="item.key"
+          v-for="(item,index) in tagData"
+          :key="index"
           :title="item.title"
+          @click="(e)=>{ handleClickVtag(e,item) }"
+          :style="{
+            transition: `transform ${animationDuration / 1000}s`,
+            animationDuration: `${animationDuration / 1000}s`
+          }"
           />
       </div>
     </div>
@@ -39,9 +47,11 @@
     <div ref="vtag-footer" class="vtag-footer">
       <slot name="footer"></slot>
     </div>
+
   </div>
 </template>
 <script>
+import { sleep } from '../util.js'
 export default {
   name: 'VTagPicker',
   props: {
@@ -53,12 +63,19 @@ export default {
     multipleSelection: {
       type: Array,
       default: () => ([])
+    },
+    animationDuration: {
+      type: Number,
+      default: 500
     }
   },
   data () {
     return {
       showTagNum: false,
-      selection: []
+      selection: [],
+      domQueue: [],
+      animating: false,
+      totalSelection: []
     }
   },
   computed: {
@@ -71,9 +88,13 @@ export default {
   watch: {
     multipleSelection: {
       handler (val) {
-        this.selection = [...val]
+        this.selection = JSON.parse(JSON.stringify(val))
+        this.totalSelection = JSON.parse(JSON.stringify(val))
       },
       immediate: true
+    },
+    totalSelection (val) {
+      this.$emit('change', JSON.parse(JSON.stringify(val)))
     },
     selection: {
       handler (val) {
@@ -87,12 +108,88 @@ export default {
       handler (val) {
         this.$nextTick(() => {
           this.computedContainerHeight()
+          this.initTagPosition()
         })
       },
       immediate: true
     }
   },
   methods: {
+    handleClickVtag (e, data) {
+      if (e.target.classList.contains('vtag-item-light')) return
+      e.target.classList.add('animate')
+      e.target.classList.add('vtag-item-light')
+      this.totalSelection.push(data)
+      this.domQueue.push({
+        event: e,
+        data
+      })
+      setTimeout(() => {
+        e.target.classList.remove('animate')
+        if (this.animating) return
+        let dom = this.domQueue.shift()
+        this.moveTag(dom.event, dom.data)
+      }, this.animationDuration)
+    },
+    async moveTag (e, data) {
+      this.animating = true
+      let $target = e.target
+      let $targetClone = e.target.cloneNode(true)
+      let $targetRect = $target.getBoundingClientRect()
+      let $vtagWrap = this.$refs['vtag-wrap']
+
+      $targetClone.style.position = 'fixed'
+      $targetClone.style.left = `${$targetRect.x}px`
+      $targetClone.style.top = `${$targetRect.y}px`
+
+      $vtagWrap.appendChild($targetClone)
+
+      $target.style.width = `${$target.offsetWidth}px`
+      $target.style.height = `${$target.offsetHeight}px`
+      $target.style.background = `transparent`
+      $target.innerHTML = ''
+
+      await sleep(10)
+
+      this.moveExist(e)
+      $targetClone.style.transform = `translate(${-$targetRect.x + 15}px,${-$targetRect.y + 10}px)`
+      setTimeout(() => {
+        // $target.parentNode.removeChild($target)
+        $targetClone.parentNode.removeChild($targetClone)
+        this.selection.unshift({
+          ...data,
+          key: this.selection.length
+        })
+        this.animating = false
+        if (this.domQueue.length) {
+          let dom = this.domQueue.shift()
+          this.moveTag(dom.event, dom.data)
+        }
+      }, this.animationDuration)
+    },
+    moveExist (e) {
+      let $target = e.target
+      let $targetWidth = $target.offsetWidth
+      let vtagItems = this.$refs['top-content'].querySelectorAll('.vtag-item')
+      vtagItems.forEach(item => {
+        let transformX = Number(item.getAttribute('transform-x')) + $targetWidth + 15
+        item.setAttribute('transform-x', transformX)
+        item.style.transform = `translate(${transformX}px, 0)`
+      })
+    },
+    // 初始化标签位置，方便后续动画
+    initTagPosition () {
+      let vtagItems = this.$refs['top-content'].querySelectorAll('.vtag-item')
+      vtagItems.forEach((dom, index) => {
+        dom.setAttribute('transform-x', 0)
+        if (index === 0) {
+          dom.style.left = `15px`
+        } else {
+          dom.style.left = `${vtagItems[index - 1].offsetLeft + vtagItems[index - 1].offsetWidth + 15}px`
+        }
+      })
+    },
+    // 判断是否显示顶部隐藏的tag数量
     computedTagNumShow () {
       const $topContent = this.$refs['top-content']
       if ($topContent.scrollWidth === $topContent.offsetWidth) {
@@ -101,6 +198,7 @@ export default {
         this.showTagNum = true
       }
     },
+    // 计算内容区域高度
     computedContainerHeight () {
       const $vtagWrap = this.$refs['vtag-wrap']
       const $container = this.$refs.container
@@ -111,6 +209,7 @@ export default {
 }
 </script>
 <style scoped lang="less">
+@import '../style/animate.less';
 .vtag {
   &-wrap{
     position: fixed;
@@ -120,6 +219,7 @@ export default {
     right: 0;
   }
   &-top {
+    height: 50px;
     box-sizing: border-box;
     background: #F2F2F2;
     font-size: 0;
@@ -130,6 +230,8 @@ export default {
       overflow: auto;
       box-sizing: border-box;
       white-space: nowrap;
+      position: relative;
+      height: 100%;
     }
     &__right {
       text-align: right;
@@ -160,10 +262,8 @@ export default {
       background: #000000;
     }
     &__item {
-      display: inline-block;
-    }
-    &__item+.vtag-top__item {
-      margin-left: 15px;
+      position: absolute;
+      left: 15px;
     }
   }
   &-container {
@@ -200,6 +300,10 @@ export default {
     &__item {
       display: inline-block;
       margin: 0 15px 15px 0;
+      position: relative;
+      &.animate {
+        animation: grow linear alternate;
+      }
     }
   }
 }

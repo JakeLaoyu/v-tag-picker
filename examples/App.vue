@@ -3,6 +3,7 @@
     <v-tag-picker
       :tagData="tagData"
       :multipleSelection="multipleSelection"
+      @change="change"
     >
       <div class="img-wrap" slot="top">
         <img class="" src="~@/examples/assets/tagbg.png" alt="">
@@ -24,7 +25,12 @@ export default {
   data () {
     return {
       tagData: Array.from(new Array(50), (val, index) => ({ title: '心血管', key: index })),
-      multipleSelection: Array.from(new Array(50), (val, index) => ({ title: '心血管', key: index }))
+      multipleSelection: Array.from(new Array(2), (val, index) => ({ title: '心血管', key: index }))
+    }
+  },
+  methods: {
+    change (val) {
+      console.log(val)
     }
   }
 }
