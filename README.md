@@ -1,6 +1,6 @@
 # v-tag-picker
 
-A cool mobile component of tag picker width vue.js
+A cool mobile component of tag picker width vue.js [中文文档](https://github.com/JakeLaoyu/v-tag-picker/blob/master/README-CN.md)
 
 # Introduction
 
@@ -10,7 +10,7 @@ A cool mobile component of tag picker width vue.js
 
 # Screenshot
 
-![](https://blogimg.jakeyu.top/v-tag-picker/Screenshot.gif)
+![](http://blogimg.jakeyu.top/v-tag-picker/Screenshot-1.gif)
 
 # Install
 
@@ -21,12 +21,12 @@ yarn add v-tag-picker
 # Usage
 
 ```js
-// 全局引用
+// global
 import vTagPicker from 'v-tag-picker'
 
 Vue.use(vTagPicker)
 
-// 组件内引用
+// component
 import { vTagPicker } from 'v-tag-picker'
 
 components: {
