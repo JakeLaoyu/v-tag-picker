@@ -44,6 +44,7 @@ export default {
     white-space: nowrap;
     box-sizing: border-box;
     vertical-align: middle;
+    user-select: none;
     &-default {
       background: #EFEFEF;
       color: #444;
