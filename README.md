@@ -4,7 +4,7 @@ A cool mobile component of tag picker width vue.js
 
 # Introduction
 
-[DEMO](https://github.com/JakeLaoyu/v-tag-picker)
+[DEMO](https://jakelaoyu.github.io/v-tag-picker/)
 
 # Screenshot
 
