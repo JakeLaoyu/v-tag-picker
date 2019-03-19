@@ -64,7 +64,7 @@
   </div>
 </template>
 <script>
-import { sleep, throttle } from '../util.js'
+import { sleep } from '../util.js'
 import tagPickerItem from './tag-picker-item'
 export default {
   name: 'vTagPicker',
