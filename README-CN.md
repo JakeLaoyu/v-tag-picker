@@ -2,6 +2,10 @@
 
 一个酷酷移动端标签选择器 [ENG DOC](https://github.com/JakeLaoyu/v-tag-picker/blob/master/README.md)
 
+[![npm](https://img.shields.io/npm/v/v-tag-picker.svg?style=flat-square)](https://www.npmjs.com/package/v-tag-picker)
+[![npm](https://img.shields.io/npm/dt/v-tag-picker.svg?style=flat-square)](https://www.npmjs.com/package/v-tag-picker)
+[![npm](https://img.shields.io/npm/l/v-tag-picker.svg?style=flat-square)](https://github.com/jakelaoyu/v-tag-picker/blob/master/LICENSE)
+
 # Introduction
 
 [DEMO](https://jakelaoyu.github.io/v-tag-picker/)

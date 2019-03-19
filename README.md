@@ -4,7 +4,7 @@ A cool mobile component of tag picker width vue.js [中文文档](https://github
 
 [![npm](https://img.shields.io/npm/v/v-tag-picker.svg?style=flat-square)](https://www.npmjs.com/package/v-tag-picker)
 [![npm](https://img.shields.io/npm/dt/v-tag-picker.svg?style=flat-square)](https://www.npmjs.com/package/v-tag-picker)
-[![npm](https://img.shields.io/npm/l/v-tag-picker.svg?style=flat-square)](https://github.com/zanseven007/v-tag-picker/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/l/v-tag-picker.svg?style=flat-square)](https://github.com/jakelaoyu/v-tag-picker/blob/master/LICENSE)
 
 # Introduction
 
