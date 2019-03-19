@@ -12,7 +12,7 @@
       </div>
 
       <div class="footer" slot="footer">
-        <a href="/">进入首页</a>
+        <a href="#">进入首页</a>
       </div>
     </v-tag-picker>
   </div>
