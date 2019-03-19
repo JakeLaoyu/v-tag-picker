@@ -8,7 +8,7 @@ A cool mobile component of tag picker width vue.js
 
 # Screenshot
 
-![](//blogimg.jakeyu.top/v-tag-picker/Screenshot.gif)
+![](https://blogimg.jakeyu.top/v-tag-picker/Screenshot.gif)
 
 # Install
 
