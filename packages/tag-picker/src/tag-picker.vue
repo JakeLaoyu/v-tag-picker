@@ -13,7 +13,6 @@
         class="vtag-top__content"
         :style="vtagTopContentStyle"
         @click="(e)=>{ handleCancelVtag(e) }"
-        @scroll="topScroll"
       >
         <VTagPickerItem
           class="vtag-top__item"
@@ -100,7 +99,6 @@ export default {
       animating: false,
       totalSelection: [], // 所有已选数据
       vtopContentWidth: '100%',
-      topScroll: throttle(this.computedTagNumShow, 100, 200),
       topVtagItemCache: null // 缓存顶部已选 tag第一个
     }
   },
