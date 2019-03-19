@@ -34,7 +34,7 @@
       </div>
 
       <div class="vtag-top__right" v-if="showTagNum">
-        <div class="vtag-top__num">{{ `+${rightTagNum}` }}</div>
+        <div class="vtag-top__num">{{ `+${totalSelection.length}` }}</div>
       </div>
     </div>
 
@@ -47,6 +47,7 @@
           v-for="(item,index) in totalData"
           :key="index"
           :name="item.name"
+          :totalSelectionKey="item[OnlyKey]"
           @click="(e)=>{ handleClickVtag(e,item) }"
           :style="{
             transition: `all ${animationDuration / 1000}s`,
@@ -63,7 +64,7 @@
   </div>
 </template>
 <script>
-import { sleep, debounce, throttle } from '../util.js'
+import { sleep, throttle } from '../util.js'
 import tagPickerItem from './tag-picker-item'
 export default {
   name: 'vTagPicker',
@@ -91,7 +92,6 @@ export default {
   },
   data () {
     return {
-      rightTagNum: 0, // 右侧被遮挡的 tag 数量
       vtagTopContentStyle: {},
       showTagNum: false,
       selection: [], // 顶部显示数据
@@ -99,9 +99,7 @@ export default {
       animating: false,
       totalSelection: [], // 所有已选数据
       vtopContentWidth: '100%',
-      debounceResetContentTag: debounce(this.resetContentTag, this.animationDuration * 1.5),
       topScroll: throttle(this.computedTagNumShow, 100, 200),
-      hasSelectionDom: [], // 缓存已选 content中的dom,用于动画结束后，合并content
       topVtagItemCache: null // 缓存顶部已选 tag第一个
     }
   },
@@ -133,15 +131,24 @@ export default {
     // 取消选中tag
     handleCancelVtag (e) {
       let $target = e.target
-      let $targetWidth = $target.offsetWidth
-      if ($target.classList.contains('vtag-item-default') || !$target.classList.contains('vtag-item')) return
-      $target.classList.remove('vtag-item-light')
-      $target.classList.add('vtag-item-default')
-      let index = this.totalSelection.findIndex(item => item[this.OnlyKey] === $target.getAttribute('totalSelection-key'))
-      this.totalData.push(this.totalSelection[index])
+      let targetKey = $target.getAttribute('totalSelection-key')
+
+      this.cancelTag(targetKey)
+    },
+    cancelTag (targetKey) {
+      let $topContent = this.$refs['top-content']
+      let $container = this.$refs['container']
+      let $topTarget = $topContent.querySelector(`[totalSelection-key=${targetKey}]`)
+      let $containerTarget = $container.querySelector(`[totalSelection-key=${targetKey}]`)
+
+      let $targetWidth = $topTarget.offsetWidth
+      if ($topTarget.classList.contains('vtag-item-default') || !$topTarget.classList.contains('vtag-item')) return
+      $topTarget.classList.remove('vtag-item-light')
+      $topTarget.classList.add('vtag-item-default')
+      let index = this.totalSelection.findIndex(item => item[this.OnlyKey] === targetKey)
       this.totalSelection.splice(index, 1)
-      $target.innerHTML = ''
-      let currentNode = $target
+      $topTarget.innerHTML = ''
+      let currentNode = $topTarget
       while (currentNode.nextElementSibling && currentNode.nextElementSibling.classList.contains('vtag-item')) {
         let nextElement = currentNode.nextElementSibling
         let transformX = Number(nextElement.getAttribute('transform-x')) - $targetWidth - 15
@@ -150,22 +157,32 @@ export default {
         currentNode = nextElement
       }
 
-      $target.parentNode.removeChild($target)
+      $topTarget.parentNode.removeChild($topTarget)
+
+      $containerTarget.classList.remove('vtag-item-light')
 
       this.computedTagNumShow()
     },
     // 选中 tag
     handleClickVtag (e, data) {
-      if (e.target.classList.contains('vtag-item-light')) return
-      e.target.classList.add('animate')
-      e.target.classList.add('vtag-item-light')
+      let $target = e.target
+      let targetKey = $target.getAttribute('totalSelection-key')
+      let $topContent = this.$refs['top-content']
+      let $topTarget = $topContent.querySelector(`[totalSelection-key=${targetKey}]`)
+      if ($target.classList.contains('vtag-item-light')) {
+        if (!$topTarget) return
+        this.cancelTag(targetKey)
+        return
+      }
+      $target.classList.add('animate')
+      $target.classList.add('vtag-item-light')
       this.totalSelection.push(data)
       this.domQueue.push({
         event: e,
         data
       })
       setTimeout(() => {
-        e.target.classList.remove('animate')
+        $target.classList.remove('animate')
         if (this.animating) return
         let dom = this.domQueue.shift()
         this.moveTag(dom.event, dom.data)
@@ -186,18 +203,16 @@ export default {
 
       $vtagWrap.appendChild($targetClone)
 
-      $target.style.width = `${$target.offsetWidth}px`
-      $target.style.height = `${$target.offsetHeight}px`
-      $target.style.background = `transparent`
-      $target.innerHTML = ''
+      // $target.style.width = `${$target.offsetWidth}px`
+      // $target.style.height = `${$target.offsetHeight}px`
+      // $target.style.background = `transparent`
+      // $target.innerHTML = ''
 
       await sleep(10)
 
       this.moveExist(e)
       $targetClone.style.transform = `translate(${-$targetRect.x + 15}px,${-$targetRect.y + 10}px)`
       setTimeout(() => {
-        this.hasSelectionDom.push($target)
-        this.debounceResetContentTag()
         $targetClone.parentNode.removeChild($targetClone)
         this.topPrepend(e, data)
         this.animating = false
@@ -266,12 +281,6 @@ export default {
         let firstItemRect = firstItem.getBoundingClientRect()
         this.$set(this.vtagTopContentStyle, 'paddingRight', '94px')
         this.vtopContentWidth = `${firstItem.offsetLeft + Number(firstItem.getAttribute('transform-x')) + firstItemRect.width + Number($topContent.style.paddingLeft) + 94}px`
-        this.rightTagNum = 0
-        vtagItems.forEach(item => {
-          let domRect = item.getBoundingClientRect()
-          let topContentStyle = window.getComputedStyle($topContent)
-          if (domRect.left + domRect.width > $topContent.clientWidth - Number(topContentStyle.paddingLeft.replace('px', '')) - Number(topContentStyle.paddingRight.replace('px', ''))) this.rightTagNum++
-        })
       }
     },
     // 计算内容区域高度
@@ -280,11 +289,6 @@ export default {
       const $container = this.$refs.container
       const $vtagFooter = this.$refs['vtag-footer']
       $container.style.height = `${$vtagWrap.offsetHeight - $container.offsetTop - ($vtagFooter.offsetHeight || 0)}px`
-    },
-    resetContentTag () {
-      this.hasSelectionDom.forEach(item => {
-        item.classList.add('hide')
-      })
     }
   },
   mounted () {},
