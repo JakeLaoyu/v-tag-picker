@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-tag-picker
-      :totalData="tagData"
+      :totalData="[...tagData,...tagData,...tagData]"
       :multipleSelection="multipleSelection"
       @change="change"
     >
