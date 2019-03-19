@@ -133,7 +133,7 @@ export default {
     handleCancelVtag (e) {
       let $target = e.target
       let targetKey = $target.getAttribute('totalSelection-key')
-
+      if (!targetKey) return
       this.cancelTag(targetKey)
     },
     cancelTag (targetKey) {
