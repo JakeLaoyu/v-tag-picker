@@ -151,6 +151,8 @@ export default {
       }
 
       $target.parentNode.removeChild($target)
+
+      this.computedTagNumShow()
     },
     // 选中 tag
     handleClickVtag (e, data) {
