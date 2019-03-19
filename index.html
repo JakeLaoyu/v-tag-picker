@@ -8,6 +8,10 @@
     <title>v-tag-picker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs.min.css">
     <style>
+        html,
+        body {
+            text-align: center;
+        }
         #Evan {
             position: fixed;
             top: 0;
@@ -28,6 +32,7 @@
             font-size: 13px;
         }
         iframe {
+            display: inline-block;
             width: 414px;   
             height: 736px;
             margin: 0 auto;
@@ -36,8 +41,7 @@
 </head>
 
 <body>
-    <div id="app"></div>
-    <iframe src="./demo/index.html" frameborder="0"></iframe>
+    <iframe src="./demo/index.html"></iframe>
     <!-- built files will be auto injected -->
     <canvas id="Evan"></canvas>
 </body>
