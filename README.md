@@ -6,6 +6,8 @@ A cool mobile component of tag picker width vue.js
 
 [DEMO](https://jakelaoyu.github.io/v-tag-picker/)
 
+[USE IN VUE](https://github.com/JakeLaoyu/v-tag-picker/blob/master/examples/App.vue)
+
 # Screenshot
 
 ![](https://blogimg.jakeyu.top/v-tag-picker/Screenshot.gif)
