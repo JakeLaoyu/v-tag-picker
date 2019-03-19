@@ -287,13 +287,8 @@ export default {
       })
     }
   },
-  mounted () {
-    this.bodyStyle = document.body.style
-    document.body.style = `${this.bodyStyle}overflow: hidden;`
-  },
-  beforeDestroy () {
-    document.body.style = this.bodyStyle
-  }
+  mounted () {},
+  beforeDestroy () {}
 }
 </script>
 <style scoped lang="less">
