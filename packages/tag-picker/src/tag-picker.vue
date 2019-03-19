@@ -44,6 +44,7 @@
       <div class="vtag-container__content">
         <VTagPickerItem
           class="vtag-container__item"
+          :type="selection.some(select=>select[OnlyKey]===item[OnlyKey]) ? 'light': 'default'"
           v-for="(item,index) in totalData"
           :key="index"
           :name="item.name"
@@ -138,8 +139,8 @@ export default {
     cancelTag (targetKey) {
       let $topContent = this.$refs['top-content']
       let $container = this.$refs['container']
-      let $topTarget = $topContent.querySelector(`[totalSelection-key=${targetKey}]`)
-      let $containerTarget = $container.querySelector(`[totalSelection-key=${targetKey}]`)
+      let $topTarget = $topContent.querySelector(`[totalSelection-key="${targetKey}"]`)
+      let $containerTarget = $container.querySelector(`[totalSelection-key="${targetKey}"]`)
 
       let $targetWidth = $topTarget.offsetWidth
       if ($topTarget.classList.contains('vtag-item-default') || !$topTarget.classList.contains('vtag-item')) return
@@ -168,14 +169,13 @@ export default {
       let $target = e.target
       let targetKey = $target.getAttribute('totalSelection-key')
       let $topContent = this.$refs['top-content']
-      let $topTarget = $topContent.querySelector(`[totalSelection-key=${targetKey}]`)
+      let $topTarget = $topContent.querySelector(`[totalSelection-key="${targetKey}"]`)
       if ($target.classList.contains('vtag-item-light')) {
         if (!$topTarget) return
         this.cancelTag(targetKey)
         return
       }
-      $target.classList.add('animate')
-      $target.classList.add('vtag-item-light')
+      $target.classList.add('vtag-item-light', 'animate')
       this.totalSelection.push(data)
       this.domQueue.push({
         event: e,

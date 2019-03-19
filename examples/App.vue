@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-tag-picker
-      :totalData="[...tagData,...tagData,...tagData]"
+      :totalData="tagData"
       :multipleSelection="multipleSelection"
       @change="change"
     >
@@ -28,73 +28,8 @@ export default {
   },
   data () {
     return {
-      tagData: [
-        {
-          'name': '心血管'
-        },
-        {
-          'name': '骨科'
-        },
-        {
-          'name': '呼吸'
-        },
-        {
-          'name': '血液'
-        },
-        {
-          'name': '精神'
-        },
-        {
-          'name': '内分泌'
-        },
-        {
-          'name': '肾内'
-        },
-        {
-          'name': '影像'
-        },
-        {
-          'name': '肿瘤'
-        },
-        {
-          'name': '神经'
-        },
-        {
-          'name': '整形外科'
-        },
-        {
-          'name': '科研论文'
-        },
-        {
-          'name': '普外'
-        },
-        {
-          'name': '罕见病'
-        },
-        {
-          'name': '风湿'
-        },
-        {
-          'name': '泌尿'
-        },
-        {
-          'name': '耳喉鼻'
-        },
-        {
-          'name': '妇产科'
-        },
-        {
-          'name': '感染'
-        }
-      ],
-      multipleSelection: [
-        {
-          'name': '妇产科'
-        },
-        {
-          'name': '感染'
-        }
-      ]
+      tagData: Array.from(new Array(100), (val, index) => ({ name: `${index}` })),
+      multipleSelection: Array.from(new Array(2), (val, index) => ({ name: `${index}` }))
     }
   },
   methods: {
