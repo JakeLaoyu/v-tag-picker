@@ -1,0 +1,106 @@
+@import '../style/animate.less';
+.vtag {
+  &-wrap{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  &-top {
+    height: 50px;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    font-size: 0;
+    margin-bottom: 15px;
+    position: relative;
+    &__content {
+      padding: 10px 15px;
+      overflow: auto;
+      box-sizing: border-box;
+      white-space: nowrap;
+      position: relative;
+      height: 100%;
+    }
+    &__right {
+      text-align: right;
+      padding-right: 15px;
+      box-sizing: border-box;
+      width: 94px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background:linear-gradient(90deg,rgba(245,245,245,0) 0%,rgba(245,245,245,1) 100%);
+      &:after {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+    &__num {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 16px;
+      color: #fff;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 6px;
+      border-radius: 16px;
+      background: #000000;
+    }
+    &__item {
+      position: absolute;
+      left: 15px;
+    }
+  }
+  &-container {
+    text-align: center;
+    font-size: 0;
+    position: relative;
+    box-sizing: border-box;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+      z-index: 2;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+      transform: rotate(180deg);
+      z-index: 2;
+    }
+    &__content {
+      min-width: 100px;
+      overflow: auto;
+      height: 100%;
+      padding: 30px 25px;
+      box-sizing: border-box;
+    }
+    &__item {
+      display: inline-block;
+      margin: 0 15px 15px 0;
+      position: relative;
+      &.hide {
+        margin: 0;
+        padding: 0;
+        width: 0!important;
+        height: 0!important;
+      }
+      &.animate {
+        animation: grow linear alternate;
+      }
+    }
+  }
+}

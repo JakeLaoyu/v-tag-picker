@@ -8,21 +8,22 @@
   >
 
     <div class="vtag-top" ref="top">
-      <div ref="top-content" class="vtag-top__content" :style="vtagTopContentStyle">
-        <div class="vtag-top-content__width" :style="{
-          width: vtopContentWidth,
-          height: '1px'
-        }"></div>
+      <div ref="top-content" class="vtag-top__content" :style="vtagTopContentStyle" @click="(e)=>{ handleCancelVtag(e) }">
         <VTagPickerItem
           class="vtag-top__item"
           type="light"
           v-for="(item,index) in selection"
           :key="index"
-          :title="item.title"
+          :name="item.name"
           :style="{
-            transition: `transform ${animationDuration / 1000}s`
+            transition: `all ${animationDuration / 1000}s`
           }"
         />
+
+        <div class="vtag-top-content__width" :style="{
+          width: vtopContentWidth,
+          height: '1px'
+        }"></div>
       </div>
 
       <div class="vtag-top__right" v-if="showTagNum">
@@ -38,7 +39,7 @@
           class="vtag-container__item"
           v-for="(item,index) in tagData"
           :key="index"
-          :title="item.title"
+          :name="item.name"
           @click="(e)=>{ handleClickVtag(e,item) }"
           :style="{
             transition: `all ${animationDuration / 1000}s`,
@@ -56,8 +57,12 @@
 </template>
 <script>
 import { sleep, debounce } from '../util.js'
+import tagPickerItem from './tag-picker-item'
 export default {
   name: 'VTagPicker',
+  components: {
+    VTagPickerItem: tagPickerItem
+  },
   props: {
     zIndex: Number,
     tagData: {
@@ -71,19 +76,24 @@ export default {
     animationDuration: {
       type: Number,
       default: 500
+    },
+    OnlyKey: {
+      type: String,
+      default: 'name'
     }
   },
   data () {
     return {
       vtagTopContentStyle: {},
       showTagNum: false,
-      selection: [],
+      selection: [], // 顶部显示数据
       domQueue: [],
       animating: false,
-      totalSelection: [],
+      totalSelection: [], // 所有已选数据
       vtopContentWidth: '100%',
       debounceResetContentTag: debounce(this.resetContentTag, this.animationDuration * 1.5),
-      hasSelectionDom: []
+      hasSelectionDom: [], // 缓存已选 content中的dom,用于动画结束后，合并content
+      topVtagItemCache: null // 缓存顶部已选 tag第一个
     }
   },
   watch: {
@@ -93,6 +103,7 @@ export default {
         this.totalSelection = JSON.parse(JSON.stringify(val))
         this.$nextTick(() => {
           this.computedTagNumShow()
+          this.initTagPosition()
         })
       },
       immediate: true
@@ -104,13 +115,35 @@ export default {
       handler (val) {
         this.$nextTick(() => {
           this.computedContainerHeight()
-          this.initTagPosition()
         })
       },
       immediate: true
     }
   },
   methods: {
+    // 取消选中tag
+    handleCancelVtag (e) {
+      let $target = e.target
+      let $targetWidth = $target.offsetWidth
+      if ($target.classList.contains('vtag-item-default') || !$target.classList.contains('vtag-item')) return
+      $target.classList.remove('vtag-item-light')
+      $target.classList.add('vtag-item-default')
+      let index = this.totalSelection.findIndex(item => item[this.OnlyKey] === $target.getAttribute('totalSelection-key'))
+      this.tagData.push(this.totalSelection[index])
+      this.totalSelection.splice(index, 1)
+      $target.innerHTML = ''
+      let currentNode = $target
+      while (currentNode.nextElementSibling && currentNode.nextElementSibling.classList.contains('vtag-item')) {
+        let nextElement = currentNode.nextElementSibling
+        let transformX = Number(nextElement.getAttribute('transform-x')) - $targetWidth - 15
+        nextElement.setAttribute('transform-x', transformX)
+        nextElement.style.transform = `translate(${transformX}px, 0)`
+        currentNode = nextElement
+      }
+
+      $target.parentNode.removeChild($target)
+    },
+    // 选中 tag
     handleClickVtag (e, data) {
       if (e.target.classList.contains('vtag-item-light')) return
       e.target.classList.add('animate')
@@ -153,10 +186,7 @@ export default {
         this.hasSelectionDom.push($target)
         this.debounceResetContentTag()
         $targetClone.parentNode.removeChild($targetClone)
-        this.selection.unshift({
-          ...data,
-          key: this.selection.length
-        })
+        this.topPrepend(e, data)
         this.animating = false
         this.computedTagNumShow()
         if (this.domQueue.length) {
@@ -165,6 +195,7 @@ export default {
         }
       }, this.animationDuration)
     },
+    // 向右移动已选tag
     moveExist (e) {
       let $target = e.target
       let $targetWidth = $target.offsetWidth
@@ -175,11 +206,31 @@ export default {
         item.style.transform = `translate(${transformX}px, 0)`
       })
     },
+    // 插入选中tag
+    topPrepend (e, data) {
+      let $topContent = this.$refs['top-content']
+      if (!this.selection.length) {
+        this.selection.unshift(data)
+        this.$nextTick(() => {
+          $topContent.querySelector('.vtag-item').setAttribute('totalSelection-key', data[this.OnlyKey])
+          this.topVtagItemCache = $topContent.querySelector('.vtag-item').cloneNode(true)
+        })
+      } else {
+        let newVtag = this.topVtagItemCache.cloneNode(true)
+        newVtag.setAttribute('totalSelection-key', data[this.OnlyKey])
+        newVtag.innerHTML = data.name
+        $topContent.prepend(newVtag)
+      }
+    },
     // 初始化标签位置，方便后续动画
     initTagPosition () {
       let vtagItems = this.$refs['top-content'].querySelectorAll('.vtag-item')
+      if (vtagItems.length) {
+        this.topVtagItemCache = vtagItems[0].cloneNode(true)
+      }
       vtagItems.forEach((dom, index) => {
         dom.setAttribute('transform-x', 0)
+        dom.style.transform = `translate(${0}px, 0)`
         if (index === 0) {
           dom.style.left = `15px`
         } else {
@@ -197,7 +248,8 @@ export default {
       } else {
         this.showTagNum = true
         let $topContent = this.$refs['top-content']
-        let firstItem = $topContent.querySelectorAll('.vtag-item')[this.multipleSelection.length - 1]
+        let vtagItems = $topContent.querySelectorAll('.vtag-item')
+        let firstItem = vtagItems[vtagItems.length - 1]
         let firstItemRect = firstItem.getBoundingClientRect()
         this.$set(this.vtagTopContentStyle, 'paddingRight', '94px')
         this.vtopContentWidth = `${firstItem.offsetLeft + Number(firstItem.getAttribute('transform-x')) + firstItemRect.width + Number($topContent.style.paddingLeft) + 94}px`
@@ -226,110 +278,5 @@ export default {
 }
 </script>
 <style scoped lang="less">
-@import '../style/animate.less';
-.vtag {
-  &-wrap{
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  &-top {
-    height: 50px;
-    box-sizing: border-box;
-    background: #F2F2F2;
-    font-size: 0;
-    margin-bottom: 15px;
-    position: relative;
-    &__content {
-      padding: 10px 15px;
-      overflow: auto;
-      box-sizing: border-box;
-      white-space: nowrap;
-      position: relative;
-      height: 100%;
-    }
-    &__right {
-      text-align: right;
-      padding-right: 15px;
-      box-sizing: border-box;
-      width: 94px;
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      background:linear-gradient(90deg,rgba(245,245,245,0) 0%,rgba(245,245,245,1) 100%);
-      &:after {
-        content: '';
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-      }
-    }
-    &__num {
-      display: inline-block;
-      vertical-align: middle;
-      font-size: 16px;
-      color: #fff;
-      height: 32px;
-      line-height: 32px;
-      padding: 0 6px;
-      border-radius: 16px;
-      background: #000000;
-    }
-    &__item {
-      position: absolute;
-      left: 15px;
-    }
-  }
-  &-container {
-    text-align: center;
-    font-size: 0;
-    position: relative;
-    box-sizing: border-box;
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 30px;
-      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
-      z-index: 2;
-    }
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 30px;
-      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
-      transform: rotate(180deg);
-      z-index: 2;
-    }
-    &__content {
-      min-width: 100px;
-      overflow: auto;
-      height: 100%;
-      padding: 30px 25px;
-      box-sizing: border-box;
-    }
-    &__item {
-      display: inline-block;
-      margin: 0 15px 15px 0;
-      position: relative;
-      &.hide {
-        margin: 0;
-        padding: 0;
-        width: 0!important;
-        height: 0!important;
-      }
-      &.animate {
-        animation: grow linear alternate;
-      }
-    }
-  }
-}
+@import url('../style/index.less');
 </style>

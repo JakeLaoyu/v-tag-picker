@@ -1,9 +1,7 @@
 import tagPicker from './tag-picker'
-import tagPickerItem from './tag-picker-item'
 
 const components = [
-  tagPicker,
-  tagPickerItem
+  tagPicker
 ]
 
 // 定义 install 方法，接收 Vue 作为参数。如果使用 use 注册插件，则所有的组件都将被注册
@@ -22,6 +20,5 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default {
   install,
   // 以下是具体的组件列表
-  tagPicker,
-  tagPickerItem
+  tagPicker
 }

@@ -19,19 +19,28 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'app',
   components: {},
   data () {
     return {
-      tagData: Array.from(new Array(50), (val, index) => ({ title: '心血管', key: index })),
-      multipleSelection: Array.from(new Array(2), (val, index) => ({ title: '心血管', key: index }))
+      tagData: [],
+      multipleSelection: []
     }
   },
   methods: {
     change (val) {
       // console.log(val)
     }
+  },
+  mounted () {
+    axios.get('http://yapi.demo.qunar.com/mock/60654/tag').then(res => {
+      this.tagData = res.data.data
+    })
+    // axios.get('https://www.easy-mock.com/mock/5c904b029f452341dc099fcc/v-tag-picker/selection').then(res => {
+    //   this.multipleSelection = res.data.data
+    // })
   }
 }
 </script>

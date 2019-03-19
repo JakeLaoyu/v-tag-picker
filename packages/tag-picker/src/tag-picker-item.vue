@@ -4,14 +4,14 @@
     :class="[ `vtag-item-${type}` ]"
     @click="handleClickVtag"
   >
-    {{ title }}
+    {{ name }}
   </div>
 </template>
 <script>
 export default {
   name: 'VTagPickerItem',
   props: {
-    title: {
+    name: {
       type: String,
       required: true
     },
