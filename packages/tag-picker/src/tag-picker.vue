@@ -161,6 +161,7 @@ export default {
       $topTarget.parentNode.removeChild($topTarget)
 
       $containerTarget.classList.remove('vtag-item-light')
+      $containerTarget.classList.add('vtag-item-default')
 
       this.computedTagNumShow()
     },
