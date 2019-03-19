@@ -1,5 +1,6 @@
 // 拼接路径
-const resolve = dir => require('path').join(__dirname, dir)
+// const resolve = dir => require('path').join(__dirname, dir)
+const path = require('path')
 
 module.exports = {
   pages: {
@@ -9,6 +10,7 @@ module.exports = {
       filename: 'index.html'
     }
   },
+  css: { extract: false },
   outputDir: 'demo',
   publicPath: process.env.NODE_ENV === 'production' ? '/v-tag-picker/demo' : '/',
   // 扩展 webpack 配置，使 packages 加入编译
@@ -26,6 +28,7 @@ module.exports = {
       })
       // 重新设置 alias
     config.resolve.alias
-      .set('@', resolve('./'))
+      .set('@', path.resolve('examples'))
+      .set('~', path.resolve('packages'))
   }
 }

@@ -21,9 +21,17 @@ yarn add v-tag-picker
 # Usage
 
 ```js
+// 全局引用
 import vTagPicker from 'v-tag-picker'
 
 Vue.use(vTagPicker)
+
+// 组件内引用
+import { vTagPicker } from 'v-tag-picker'
+
+components: {
+  vTagPicker
+}
 ```
 
 ```html

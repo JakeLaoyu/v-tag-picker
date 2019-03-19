@@ -66,7 +66,7 @@
 import { sleep, debounce, throttle } from '../util.js'
 import tagPickerItem from './tag-picker-item'
 export default {
-  name: 'VTagPicker',
+  name: 'vTagPicker',
   components: {
     VTagPickerItem: tagPickerItem
   },

@@ -16,6 +16,7 @@
     "axios": "^0.18.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "v-tag-picker": "^0.1.0",
     "vue": "^2.6.6"
   },
   "devDependencies": {

@@ -63,4 +63,5 @@ export const sleep = (time) => {
       reslove()
     }, time)
   })
+   /* eslint-enable */
 }
