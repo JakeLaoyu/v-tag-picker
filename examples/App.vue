@@ -19,14 +19,79 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   name: 'app',
   components: {},
   data () {
     return {
-      tagData: [],
-      multipleSelection: []
+      tagData: [
+        {
+          'name': '心血管'
+        },
+        {
+          'name': '骨科'
+        },
+        {
+          'name': '呼吸'
+        },
+        {
+          'name': '血液'
+        },
+        {
+          'name': '精神'
+        },
+        {
+          'name': '内分泌'
+        },
+        {
+          'name': '肾内'
+        },
+        {
+          'name': '影像'
+        },
+        {
+          'name': '肿瘤'
+        },
+        {
+          'name': '神经'
+        },
+        {
+          'name': '整形外科'
+        },
+        {
+          'name': '科研论文'
+        },
+        {
+          'name': '普外'
+        },
+        {
+          'name': '罕见病'
+        },
+        {
+          'name': '风湿'
+        },
+        {
+          'name': '泌尿'
+        },
+        {
+          'name': '耳喉鼻'
+        },
+        {
+          'name': '妇产科'
+        },
+        {
+          'name': '感染'
+        }
+      ],
+      multipleSelection: [
+        {
+          'name': '妇产科'
+        },
+        {
+          'name': '感染'
+        }
+      ]
     }
   },
   methods: {
@@ -35,12 +100,12 @@ export default {
     }
   },
   mounted () {
-    axios.get('http://yapi.demo.qunar.com/mock/60654/tag').then(res => {
-      this.tagData = res.data.data
-    })
-    axios.get('http://yapi.demo.qunar.com/mock/60654/selection').then(res => {
-      this.multipleSelection = res.data.data
-    })
+    // axios.get('http://yapi.demo.qunar.com/mock/60654/tag').then(res => {
+    //   this.tagData = res.data.data
+    // })
+    // axios.get('http://yapi.demo.qunar.com/mock/60654/selection').then(res => {
+    //   this.multipleSelection = res.data.data
+    // })
   }
 }
 </script>
