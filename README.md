@@ -68,5 +68,12 @@ components: {
 | ------ | -------------------- | ------------- |
 | change | Selected data change | Selected data |
 
+# slot
+
+| Name   | Description          |
+| ------ | -------------------- |
+| top    | In front of the list |
+| footer | bottom page          |
+
 # License
 MIT © [JakeLaoyu](https://github.com/JakeLaoyu)

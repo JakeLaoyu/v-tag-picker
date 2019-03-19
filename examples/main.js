@@ -2,9 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 
 // 导入组件库
-import TagPicker from '~/index'
+// import TagPicker from '~/index'
 // 注册组件库
-Vue.use(TagPicker)
+// Vue.use(TagPicker)
 
 Vue.config.productionTip = false
 

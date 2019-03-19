@@ -20,11 +20,11 @@
 
 <script>
 // import axios from 'axios'
-// import { vTagPicker } from 'v-tag-picker'
+import { vTagPicker } from '~'
 export default {
   name: 'app',
   components: {
-    // vTagPicker
+    vTagPicker
   },
   data () {
     return {
