@@ -10,7 +10,7 @@
 
 # Screenshot
 
-![](https://blogimg.jakeyu.top/v-tag-picker/Screenshot-2.gif)
+![](https://blogimg.jakeyu.top/v-tag-picker/screenshot-3.gif)
 
 # Install
 

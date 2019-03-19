@@ -14,7 +14,7 @@ A cool mobile component of tag picker width vue.js [中文文档](https://github
 
 # Screenshot
 
-![](https://blogimg.jakeyu.top/v-tag-picker/Screenshot-2.gif)
+![](https://blogimg.jakeyu.top/v-tag-picker/screenshot-3.gif)
 
 # Install
 
