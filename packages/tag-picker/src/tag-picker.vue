@@ -8,13 +8,20 @@
   >
 
     <div class="vtag-top" ref="top">
-      <div ref="top-content" class="vtag-top__content" :style="vtagTopContentStyle" @click="(e)=>{ handleCancelVtag(e) }">
+      <div
+        ref="top-content"
+        class="vtag-top__content"
+        :style="vtagTopContentStyle"
+        @click="(e)=>{ handleCancelVtag(e) }"
+        @scroll="topScroll"
+      >
         <VTagPickerItem
           class="vtag-top__item"
           type="light"
           v-for="(item,index) in selection"
           :key="index"
           :name="item.name"
+          :totalSelectionKey="item[OnlyKey]"
           :style="{
             transition: `all ${animationDuration / 1000}s`
           }"
@@ -27,7 +34,7 @@
       </div>
 
       <div class="vtag-top__right" v-if="showTagNum">
-        <div class="vtag-top__num">{{ `+${selection.length}` }}</div>
+        <div class="vtag-top__num">{{ `+${rightTagNum}` }}</div>
       </div>
     </div>
 
@@ -37,7 +44,7 @@
       <div class="vtag-container__content">
         <VTagPickerItem
           class="vtag-container__item"
-          v-for="(item,index) in tagData"
+          v-for="(item,index) in totalData"
           :key="index"
           :name="item.name"
           @click="(e)=>{ handleClickVtag(e,item) }"
@@ -56,7 +63,7 @@
   </div>
 </template>
 <script>
-import { sleep, debounce } from '../util.js'
+import { sleep, debounce, throttle } from '../util.js'
 import tagPickerItem from './tag-picker-item'
 export default {
   name: 'VTagPicker',
@@ -65,7 +72,7 @@ export default {
   },
   props: {
     zIndex: Number,
-    tagData: {
+    totalData: {
       type: Array,
       default: () => ([])
     },
@@ -84,6 +91,7 @@ export default {
   },
   data () {
     return {
+      rightTagNum: 0, // 右侧被遮挡的 tag 数量
       vtagTopContentStyle: {},
       showTagNum: false,
       selection: [], // 顶部显示数据
@@ -92,6 +100,7 @@ export default {
       totalSelection: [], // 所有已选数据
       vtopContentWidth: '100%',
       debounceResetContentTag: debounce(this.resetContentTag, this.animationDuration * 1.5),
+      topScroll: throttle(this.computedTagNumShow, 100, 200),
       hasSelectionDom: [], // 缓存已选 content中的dom,用于动画结束后，合并content
       topVtagItemCache: null // 缓存顶部已选 tag第一个
     }
@@ -111,7 +120,7 @@ export default {
     totalSelection (val) {
       this.$emit('change', JSON.parse(JSON.stringify(val)))
     },
-    tagData: {
+    totalData: {
       handler (val) {
         this.$nextTick(() => {
           this.computedContainerHeight()
@@ -129,7 +138,7 @@ export default {
       $target.classList.remove('vtag-item-light')
       $target.classList.add('vtag-item-default')
       let index = this.totalSelection.findIndex(item => item[this.OnlyKey] === $target.getAttribute('totalSelection-key'))
-      this.tagData.push(this.totalSelection[index])
+      this.totalData.push(this.totalSelection[index])
       this.totalSelection.splice(index, 1)
       $target.innerHTML = ''
       let currentNode = $target
@@ -166,6 +175,8 @@ export default {
       let $targetClone = e.target.cloneNode(true)
       let $targetRect = $target.getBoundingClientRect()
       let $vtagWrap = this.$refs['vtag-wrap']
+      let $topContent = this.$refs['top-content']
+      $topContent.scrollLeft = 0
 
       $targetClone.style.position = 'fixed'
       $targetClone.style.left = `${$targetRect.x}px`
@@ -253,6 +264,12 @@ export default {
         let firstItemRect = firstItem.getBoundingClientRect()
         this.$set(this.vtagTopContentStyle, 'paddingRight', '94px')
         this.vtopContentWidth = `${firstItem.offsetLeft + Number(firstItem.getAttribute('transform-x')) + firstItemRect.width + Number($topContent.style.paddingLeft) + 94}px`
+        this.rightTagNum = 0
+        vtagItems.forEach(item => {
+          let domRect = item.getBoundingClientRect()
+          let topContentStyle = window.getComputedStyle($topContent)
+          if (domRect.left + domRect.width > $topContent.clientWidth - Number(topContentStyle.paddingLeft.replace('px', '')) - Number(topContentStyle.paddingRight.replace('px', ''))) this.rightTagNum++
+        })
       }
     },
     // 计算内容区域高度

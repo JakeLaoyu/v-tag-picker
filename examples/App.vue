@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-tag-picker
-      :tagData="tagData"
+      :totalData="tagData"
       :multipleSelection="multipleSelection"
       @change="change"
     >
@@ -38,9 +38,9 @@ export default {
     axios.get('http://yapi.demo.qunar.com/mock/60654/tag').then(res => {
       this.tagData = res.data.data
     })
-    // axios.get('https://www.easy-mock.com/mock/5c904b029f452341dc099fcc/v-tag-picker/selection').then(res => {
-    //   this.multipleSelection = res.data.data
-    // })
+    axios.get('http://yapi.demo.qunar.com/mock/60654/selection').then(res => {
+      this.multipleSelection = res.data.data
+    })
   }
 }
 </script>

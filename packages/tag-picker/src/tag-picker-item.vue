@@ -2,6 +2,7 @@
   <div
     class="vtag-item"
     :class="[ `vtag-item-${type}` ]"
+    :totalSelection-key="totalSelectionKey"
     @click="handleClickVtag"
   >
     {{ name }}
@@ -11,6 +12,9 @@
 export default {
   name: 'VTagPickerItem',
   props: {
+    totalSelectionKey: {
+      type: String
+    },
     name: {
       type: String,
       required: true
