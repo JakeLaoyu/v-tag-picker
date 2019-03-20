@@ -20,7 +20,7 @@
           v-for="(item,index) in selection"
           :key="index"
           :name="item.name"
-          :totalSelectionKey="item[OnlyKey]"
+          :totalSelectionKey="item[onlyKey]"
           :style="{
             transition: `all ${animationDuration / 1000}s`
           }"
@@ -43,11 +43,11 @@
       <div class="vtag-container__content">
         <VTagPickerItem
           class="vtag-container__item"
-          :type="selection.some(select=>select[OnlyKey]===item[OnlyKey]) ? 'light': 'default'"
+          :type="selection.some(select=>select[onlyKey]===item[onlyKey]) ? 'light': 'default'"
           v-for="(item,index) in totalData"
           :key="index"
           :name="item.name"
-          :totalSelectionKey="item[OnlyKey]"
+          :totalSelectionKey="item[onlyKey]"
           @click="(e)=>{ handleClickVtag(e,item) }"
           :style="{
             transition: `all ${animationDuration / 1000}s`,
@@ -85,7 +85,7 @@ export default {
       type: Number,
       default: 500
     },
-    OnlyKey: {
+    onlyKey: {
       type: String,
       default: 'name'
     }
@@ -144,7 +144,7 @@ export default {
       if ($topTarget.classList.contains('vtag-item-default') || !$topTarget.classList.contains('vtag-item')) return
       $topTarget.classList.remove('vtag-item-light')
       $topTarget.classList.add('vtag-item-default')
-      let index = this.totalSelection.findIndex(item => item[this.OnlyKey] === targetKey)
+      let index = this.totalSelection.findIndex(item => item[this.onlyKey] === targetKey)
       this.totalSelection.splice(index, 1)
       $topTarget.innerHTML = ''
       let currentNode = $topTarget
@@ -239,12 +239,12 @@ export default {
       if (!this.selection.length) {
         this.selection.unshift(data)
         this.$nextTick(() => {
-          $topContent.querySelector('.vtag-item').setAttribute('totalSelection-key', data[this.OnlyKey])
+          $topContent.querySelector('.vtag-item').setAttribute('totalSelection-key', data[this.onlyKey])
           this.topVtagItemCache = $topContent.querySelector('.vtag-item').cloneNode(true)
         })
       } else {
         let newVtag = this.topVtagItemCache.cloneNode(true)
-        newVtag.setAttribute('totalSelection-key', data[this.OnlyKey])
+        newVtag.setAttribute('totalSelection-key', data[this.onlyKey])
         newVtag.innerHTML = data.name
         $topContent.prepend(newVtag)
       }
