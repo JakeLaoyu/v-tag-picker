@@ -4,7 +4,7 @@
     <h3 class="subtitle">🦴 A cool mobile component of tag picker width vue.js
       <a href="https://github.com/JakeLaoyu/v-tag-picker">Github</a>
     </h3>
-    <p>
+    <p class="demo__icon">
       <a href="https://www.npmjs.com/package/v-tag-picker" rel="nofollow">
         <img
           src="https://camo.githubusercontent.com/6d568bc6b16ff3247b8880e521e9e4522d9b6e55/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f762d7461672d7069636b65722e7376673f7374796c653d666c61742d737175617265"
@@ -171,6 +171,11 @@ export default {
     display: flex;
     justify-content: center;
     align-items: stretch;
+  }
+  &__icon {
+    a {
+      margin-right: 10px;
+    }
   }
 }
 
