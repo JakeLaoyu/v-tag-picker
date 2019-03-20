@@ -2,7 +2,7 @@
   <div id="app">
     <v-tag-picker
       :totalData="tagData"
-      :multipleSelection="multipleSelection"
+      :selectedData="selectedData"
       @change="change"
     >
       <div class="img-wrap" slot="top">
@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       tagData: Array.from(new Array(100), (val, index) => ({ name: `${index}` })),
-      multipleSelection: Array.from(new Array(2), (val, index) => ({ name: `${index}` }))
+      selectedData: Array.from(new Array(2), (val, index) => ({ name: `${index}` }))
     }
   },
   methods: {
@@ -42,7 +42,7 @@ export default {
     //   this.tagData = res.data.data
     // })
     // axios.get('http://yapi.demo.qunar.com/mock/60654/selection').then(res => {
-    //   this.multipleSelection = res.data.data
+    //   this.selectedData = res.data.data
     // })
   }
 }

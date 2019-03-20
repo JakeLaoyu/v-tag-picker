@@ -41,7 +41,7 @@ components: {
 ```html
 <v-tag-picker
   :totalData="tagData"
-  :multipleSelection="multipleSelection"
+  :selectedData="selectedData"
   @change="change"
 >
   <div class="img-wrap" slot="top">
@@ -62,7 +62,7 @@ components: {
 | ----------------- | ------ | ------- | ------------------------------------------------------- |
 | zIndex            | Number |         | tag-picker z-index                                      |
 | totalData         | Array  | []      | picker list data,Must has `name` key. [{ name: 'tag' }] |
-| multipleSelection | Array  | []      | Selected list                                           |
+| selectedData      | Array  | []      | Selected list                                           |
 | animationDuration | Number | 500     | Animation time(ms).                                     |
 | OnlyKey           | String | name    | Unique identifier for each item of data                 |
 

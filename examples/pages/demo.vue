@@ -37,7 +37,7 @@
 &lt;template&gt;
   &lt;v-tag-picker
     :totalData="tagData"
-    :multipleSelection="multipleSelection"
+    :selectedData="selectedData"
     @change="change"
   &gt;
     &lt;div class="img-wrap" slot="top"&gt;
@@ -62,7 +62,7 @@ export default {
   data () {
     return {
       tagData: Array.from(new Array(100), (val, index) => ({ name: `${index}` })),
-      multipleSelection: Array.from(new Array(2), (val, index) => ({ name: `${index}` }))
+      selectedData: Array.from(new Array(2), (val, index) => ({ name: `${index}` }))
     }
   },
   methods: {

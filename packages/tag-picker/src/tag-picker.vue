@@ -77,7 +77,7 @@ export default {
       type: Array,
       default: () => ([])
     },
-    multipleSelection: {
+    selectedData: {
       type: Array,
       default: () => ([])
     },
@@ -103,7 +103,7 @@ export default {
     }
   },
   watch: {
-    multipleSelection: {
+    selectedData: {
       handler (val) {
         this.selection = JSON.parse(JSON.stringify(val))
         this.totalSelection = JSON.parse(JSON.stringify(val))

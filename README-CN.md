@@ -41,7 +41,7 @@ components: {
 ```html
 <v-tag-picker
   :totalData="tagData"
-  :multipleSelection="multipleSelection"
+  :selectedData="selectedData"
   @change="change"
 >
   <div class="img-wrap" slot="top">
@@ -62,7 +62,7 @@ components: {
 | ----------------- | ------ | ------- | --------------------------------------------- |
 | zIndex            | Number |         | 选择器`z-index`样式                           |
 | totalData         | Array  | []      | 列表数据，必需有`name`字段。[{ name: 'tag' }] |
-| multipleSelection | Array  | []      | 已选择列表                                    |
+| selectedData      | Array  | []      | 已选择列表                                    |
 | animationDuration | Number | 500     | 动画时间(ms).                                 |
 | OnlyKey           | String | name    | 数据唯一值的 key                              |
 
