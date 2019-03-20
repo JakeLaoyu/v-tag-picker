@@ -8,9 +8,7 @@
 
 # Introduction
 
-[DEMO](https://jakelaoyu.github.io/v-tag-picker/)
-
-[在vue中使用](https://github.com/JakeLaoyu/v-tag-picker/blob/master/examples/App.vue)
+[DEMO](https://jakelaoyu.github.io/v-tag-picker/demo/#/demo)
 
 # Screenshot
 

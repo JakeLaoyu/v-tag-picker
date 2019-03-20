@@ -1,11 +1,11 @@
 {
   "name": "v-tag-picker",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "author": "Jake <yucj@dxy.cn>",
   "private": false,
   "keyword": "v-tag-picker vTagPicker picker",
   "repository": "JakeLaoyu/v-tag-picker",
-  "homepage": "https://jakelaoyu.github.io/v-tag-picker/",
+  "homepage": "https://jakelaoyu.github.io/v-tag-picker/demo/#/demo",
   "scripts": {
     "start": "vue-cli-service serve --open",
     "serve": "vue-cli-service serve",
