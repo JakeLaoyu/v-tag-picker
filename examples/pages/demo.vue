@@ -77,7 +77,7 @@ export default {
       </div>
 
       <div class="demo__iframe">
-        <iframe src="/test" frameborder="0"></iframe>
+        <iframe src="#test" frameborder="0"></iframe>
       </div>
     </div>
     <canvas id="Evan"></canvas>
