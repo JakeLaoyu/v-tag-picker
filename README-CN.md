@@ -17,7 +17,7 @@
 # Install
 
 ```sh
-yarn add v-tag-picker
+npm i v-tag-picker -S
 ```
 
 # Usage

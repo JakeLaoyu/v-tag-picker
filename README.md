@@ -17,7 +17,7 @@ A cool mobile component of tag picker width vue.js [中文文档](https://github
 # Install
 
 ```sh
-yarn add v-tag-picker
+npm i v-tag-picker -S
 ```
 
 # Usage
