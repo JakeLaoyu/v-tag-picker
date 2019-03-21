@@ -1,21 +1,19 @@
 <template>
-  <div id="app">
-    <v-tag-picker
-      :totalData="tagData"
-      :selectedData="selectedData"
-      @change="change"
-    >
-      <div class="img-wrap" slot="top">
-        <img class="" src="~@/assets/tagbg.png" alt="">
-        <div class="img-wrap__title">最感兴趣的栏目</div>
-        <div class="img-wrap__subtitle">定制专属于我的课程栏目</div>
-      </div>
+  <v-tag-picker
+    :totalData="tagData"
+    :selectedData="selectedData"
+    @change="change"
+  >
+    <div class="img-wrap" slot="top">
+      <img class="" src="~@/assets/tagbg.png" alt="">
+      <div class="img-wrap__title">最感兴趣的栏目</div>
+      <div class="img-wrap__subtitle">定制专属于我的课程栏目</div>
+    </div>
 
-      <div class="footer" slot="footer">
-        <a href="#">进入首页</a>
-      </div>
-    </v-tag-picker>
-  </div>
+    <div class="footer" slot="footer">
+      <a href="#">进入首页</a>
+    </div>
+  </v-tag-picker>
 </template>
 
 <script>
