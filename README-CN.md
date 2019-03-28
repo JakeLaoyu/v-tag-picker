@@ -56,13 +56,14 @@ components: {
 
 # Props
 
-| Name              | Type   | Default | Description                                   |
-| ----------------- | ------ | ------- | --------------------------------------------- |
-| zIndex            | Number |         | 选择器`z-index`样式                           |
-| totalData         | Array  | []      | 列表数据，必需有`name`字段。[{ name: 'tag' }] |
-| selectedData      | Array  | []      | 已选择列表                                    |
-| animationDuration | Number | 500     | 动画时间(ms).                                 |
-| OnlyKey           | String | name    | 数据唯一值的 key                              |
+| Name              | Type    | Default | Description                                   |
+| ----------------- | ------- | ------- | --------------------------------------------- |
+| zIndex            | Number  |         | 选择器`z-index`样式                           |
+| totalData         | Array   | []      | 列表数据，必需有`name`字段。[{ name: 'tag' }] |
+| selectedData      | Array   | []      | 已选择列表                                    |
+| animationDuration | Number  | 500     | 动画时间(ms).                                 |
+| onlyKey           | String  | name    | 数据唯一值的 key                              |
+| appendToBody      | Boolean | name    | 插入到body元素后面                            |
 
 # Events
 

@@ -56,13 +56,14 @@ components: {
 
 # Props
 
-| Name              | Type   | Default | Description                                             |
-| ----------------- | ------ | ------- | ------------------------------------------------------- |
-| zIndex            | Number |         | tag-picker z-index                                      |
-| totalData         | Array  | []      | picker list data,Must has `name` key. [{ name: 'tag' }] |
-| selectedData      | Array  | []      | Selected list                                           |
-| animationDuration | Number | 500     | Animation time(ms).                                     |
-| OnlyKey           | String | name    | Unique identifier for each item of data                 |
+| Name              | Type    | Default | Description                                             |
+| ----------------- | ------- | ------- | ------------------------------------------------------- |
+| zIndex            | Number  |         | tag-picker z-index                                      |
+| totalData         | Array   | []      | picker list data,Must has `name` key. [{ name: 'tag' }] |
+| selectedData      | Array   | []      | Selected list                                           |
+| animationDuration | Number  | 500     | Animation time(ms).                                     |
+| onlyKey           | String  | name    | Unique identifier for each item of data                 |
+| appendToBody      | Boolean | name    | append to body element                                  |
 
 # Events
 

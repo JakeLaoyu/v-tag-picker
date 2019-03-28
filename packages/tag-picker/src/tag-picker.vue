@@ -88,6 +88,10 @@ export default {
     onlyKey: {
       type: String,
       default: 'name'
+    },
+    appendToBody: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -290,7 +294,9 @@ export default {
       $container.style.height = `${$vtagWrap.offsetHeight - $container.offsetTop - ($vtagFooter.offsetHeight || 0)}px`
     }
   },
-  mounted () {},
+  mounted () {
+    this.appendToBody && document.body.appendChild(this.$refs['vtag-wrap'])
+  },
   beforeDestroy () {}
 }
 </script>

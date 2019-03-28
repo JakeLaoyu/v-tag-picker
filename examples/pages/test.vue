@@ -2,6 +2,7 @@
   <v-tag-picker
     :totalData="tagData"
     :selectedData="selectedData"
+    :appendToBody="true"
     @change="change"
   >
     <div class="img-wrap" slot="top">
