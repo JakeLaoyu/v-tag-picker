@@ -10,7 +10,6 @@
 </template>
 <script>
 export default {
-  name: 'vTagPickerItem',
   props: {
     totalSelectionKey: {
       type: String
