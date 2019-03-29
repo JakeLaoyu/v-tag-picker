@@ -67,6 +67,7 @@
 import { sleep } from '../util.js'
 import tagPickerItem from './tag-picker-item'
 export default {
+  name: 'v-tag-picker',
   components: {
     VTagPickerItem: tagPickerItem
   },
