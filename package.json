@@ -15,7 +15,7 @@
   },
   "main": "lib/vtagpicker.umd.min.js",
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "v-tag-picker": "0.1.1",
