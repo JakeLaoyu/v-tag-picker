@@ -19,7 +19,7 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "v-tag-picker": "0.1.1",
-    "vue": "^2.6.6",
+    "vue": "^3.0.0",
     "vue-router": "^3.0.2"
   },
   "devDependencies": {
